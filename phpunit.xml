@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit
+    bootstrap="tests/bootstrap.php"
+    colors="true"
+>
+    <testsuites>
+        <testsuite name="router">
+        	<file phpVersion="7.4.0" phpVersionOperator=">=">./tests/RequestURITest.php</file>
+        	<file phpVersion="7.4.0" phpVersionOperator=">=">./tests/RequestURITest.php</file>
+        </testsuite>
+        <testsuite name="all">
+            <directory prefix="" suffix="Test.php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

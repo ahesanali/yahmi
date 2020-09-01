@@ -1,0 +1,28 @@
+{
+    "name": "ahesanali/yahmi",
+    "description": "PHP application development library or framewaork.Yahmi(To protect,to save. Arabic)",
+    "type": "library",
+    "require": {
+        "philo/laravel-blade": "^3.1",
+        "php-di/php-di": "^6.2"
+    },
+    "autoload": {
+        "classmap": [
+
+        ],
+         "files": [
+            "src/Functions/helpers.php"
+        ],
+        "psr-4": {
+            "Yahmi\\": "src"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ahesanali Suthar",
+            "email": "ahesanali.suthar@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
