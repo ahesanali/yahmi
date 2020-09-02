@@ -1,6 +1,6 @@
 {
     "name": "ahesanali/yahmi",
-    "description": "PHP application development library or framewaork.Yahmi(To protect,to save. Arabic)",
+    "description": "PHP application development library or framewaork Yahmi(To protect,to save.)",
     "type": "library",
     "require": {
         "philo/laravel-blade": "^3.1",
