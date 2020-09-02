@@ -10,6 +10,9 @@ This library covers below modules for MVC application
 5. Router
 6. Session Management
 7. Auth and Permission module
+8. Application Logging
+9. Configuration
+10. Notifications(Email,SMS abstraction)
 
 Auth Library Classes
 --
