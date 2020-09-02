@@ -36,7 +36,7 @@ class ConfigTestCase extends TestCase
 	public function test_get_config_key()
 	{
 		$config = new Config('app.php');
-		$this->assertEquals($config->get('app_name'), '/research/phpkit');
+		$this->assertEquals($config->get('app_name'), '/research/yahmi');
 	}
 
 }

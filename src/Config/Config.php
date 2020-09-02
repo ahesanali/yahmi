@@ -54,6 +54,7 @@ class Config
    */
   private function loadConfigFile()
   {
-  	$this->configuration = new Collection(include __DIR__."/../../config/".$this->fileName );
+      $application_root =  getcwd(); 
+     $this->configuration = new Collection(include $application_root."/config/".$this->fileName );
   }
 }

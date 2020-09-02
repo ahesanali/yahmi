@@ -39,7 +39,7 @@ class RouterTest extends TestCase
 		$router->get('request_ticket','/projects/:id/request_tickets',['controller'=>'RTController','action' => 'getTickets']);
 		$matching_route_url = $router->generateUrl('request_ticket',[':id'=>2]);
 		
-		$this->assertEquals($matching_route_url,'/research/phpkit/projects/2/request_tickets');
+		$this->assertEquals($matching_route_url,'/research/yahmi/projects/2/request_tickets');
 	}
 
 }
