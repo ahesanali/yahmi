@@ -1,13 +1,9 @@
 <?php
 
-namespace Inspire\PhpApp\Application\Utils;
+namespace Yahmi\Validation;
 
-include_once __DIR__.'/ValidationType.php';
-
-use Inspire\PhpApp\Application\Utils\ValidationType;
-
-use Exception;
-use DateTime;
+use \Exception;
+use \DateTime;
 
 class Validator
 {

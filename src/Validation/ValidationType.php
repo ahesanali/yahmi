@@ -3,7 +3,7 @@
 namespace Yahmi\Validation;
 
 
-use ReflectionClass;
+use \ReflectionClass;
 
 class ValidationType
 {

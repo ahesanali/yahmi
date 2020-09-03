@@ -33,7 +33,7 @@ if (! function_exists('route')) {
 if (! function_exists('asset')) {
 	function asset($asset_file_name)
 	{
-		return config('app.php','app_name').'/assets/'.$asset_file_name;
+		return config('app.php','app_dir').'/assets/'.$asset_file_name;
 	}
 }
 

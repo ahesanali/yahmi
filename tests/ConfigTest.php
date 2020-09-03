@@ -29,14 +29,14 @@ class ConfigTestCase extends TestCase
 	public function test_config_has_key_file()
 	{
 		$config = new Config('app.php');
-		$this->assertEquals($config->has('app_name'), true);
+		$this->assertEquals($config->has('app_dir'), true);
 	}
 
 
 	public function test_get_config_key()
 	{
 		$config = new Config('app.php');
-		$this->assertEquals($config->get('app_name'), '/research/yahmi');
+		$this->assertEquals($config->get('app_dir'), '/research/yahmi');
 	}
 
 }

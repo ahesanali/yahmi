@@ -56,9 +56,9 @@ class Router
 	 */
 	public function controller($controllerName)
 	{
-		$controller_class_name = $this->controllerBaseNameSpace."\\".$controllerName;
+		$controller_class_name = $this->controllerBaseNameSpace.$controllerName;
 		if (class_exists($controller_class_name) == FALSE)
-			throw new ControllerNotFoundException("Controller class ".$$controller_class_name." not found.", 0);
+			throw new ControllerNotFoundException("Controller class ".$controller_class_name." not found.", 0);
 			
 		$oReflectionClass = new ReflectionClass($controller_class_name);
 
@@ -83,7 +83,7 @@ class Router
 				$this->get($route_name, $route_uri , ['controller'=>$controllerName,'action' => $action_method]);
 
 			if (strpos($action_method, 'post') !== FALSE)
-				$this->post($route_name, $route_uri, ['controller'=>$controllerName,'action' => 'index']);
+				$this->post($route_name, $route_uri, ['controller'=>$controllerName,'action' => $action_method]);
 
 		}
 
@@ -134,9 +134,9 @@ class Router
 		if(count($matchingRoutes) > 0){
 			$firstMatchingRoute = $matchingRoutes->first() ;
 			$config = new Config('app.php');
-			// $config->get('app_name'); //returning app base path
+			// $config->get('app_dir'); //returning app base path
 			
-			return $config->get('app_name').$firstMatchingRoute->getRequestURI()->getActualUrl($params);
+			return $config->get('app_dir').$firstMatchingRoute->getRequestURI()->getActualUrl($params);
 		}else{
 			throw new RouteNotFoundException("RouteNotFound! requested route is invalid.", 1);
 		}
