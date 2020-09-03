@@ -18,7 +18,8 @@ class Logger
    {
      	//open file
         $config = new Config('app.php');
-        $this->logFile = __DIR__.'/../../../'.$config->get('log_file');
+        $application_root =  getcwd(); 
+        $this->logFile = $application_root.'/'.$config->get('log_file');
      	$this->fileHandle = fopen($this->logFile, "a");
 
      	if($this->fileHandle === FALSE || $this->fileHandle === NULL)
