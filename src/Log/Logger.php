@@ -21,7 +21,6 @@ class Logger
         $application_root =  getcwd(); 
         $this->logFile = $application_root.'/'.$config->get('log_file');
      	$this->fileHandle = fopen($this->logFile, "a");
-
      	if($this->fileHandle === FALSE || $this->fileHandle === NULL)
      			throw new \Exception("Unable to open log file: ".$this->logFile.".");
 

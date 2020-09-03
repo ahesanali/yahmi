@@ -3,9 +3,16 @@ namespace Yahmi\Routing;
 
 use Illuminate\Support\Collection;
 use Yahmi\Config\Config;
+use Yahmi\Functions\StringUtils;
+use \ReflectionClass;
 
-class Router{
-
+class Router
+{
+	/**
+	 * Controller base name space in applicaiton to instatiate the class
+	 * @var string
+	 */
+	private $controllerBaseNameSpace = "";
 	/**
 	 * Collection of routes
 	 * @var Array[] Route
@@ -15,6 +22,10 @@ class Router{
 	public function __construct()
 	{
 		$this->routes = new Collection();
+	}
+	public function setControllerBaseNameSpace($controllerNameSpace)
+	{
+		$this->controllerBaseNameSpace = $controllerNameSpace;
 	}
 	/**
 	 * return Route which accept get request
@@ -39,6 +50,44 @@ class Router{
 		$this->addRoute($routeName,['POST'],$uri, $options);
 	}
 
+	/**
+	 * Add routes using controller class Name
+	 * @param  [String] $controllerName [just add  ProjectController]
+	 */
+	public function controller($controllerName)
+	{
+		$controller_class_name = $this->controllerBaseNameSpace."\\".$controllerName;
+		if (class_exists($controller_class_name) == FALSE)
+			throw new ControllerNotFoundException("Controller class ".$$controller_class_name." not found.", 0);
+			
+		$oReflectionClass = new ReflectionClass($controller_class_name);
+
+		foreach ($oReflectionClass->getMethods() as $key => $reflectionMethod) {
+			
+			$action_method = $reflectionMethod->name;
+			
+			$controller_uri_name = str_replace('controller', '', strtolower($controllerName));
+			$method_name_only = str_replace(array("get", "post"), "", $action_method);
+			$action_method_uri_name = StringUtils::camel2dashed($method_name_only);
+			$action_method_route_name = StringUtils::camel2dashed($action_method);
+
+			$route_name = $controller_uri_name.".".$action_method_route_name;
+			$route_uri = "/".$controller_uri_name."/".$action_method_uri_name;
+
+			foreach($reflectionMethod->getParameters() as $index =>$method_param)
+			{
+				$route_uri = $route_uri."/:".$method_param->name;
+			}
+			
+			if (strpos($action_method, 'get') !== FALSE)
+				$this->get($route_name, $route_uri , ['controller'=>$controllerName,'action' => $action_method]);
+
+			if (strpos($action_method, 'post') !== FALSE)
+				$this->post($route_name, $route_uri, ['controller'=>$controllerName,'action' => 'index']);
+
+		}
+
+	}
 	protected function addRoute($routeName,$methods,$uri, $options)
 	{
 		if (array_key_exists('middlewares', $options) === FALSE)
@@ -85,12 +134,25 @@ class Router{
 		if(count($matchingRoutes) > 0){
 			$firstMatchingRoute = $matchingRoutes->first() ;
 			$config = new Config('app.php');
-			$config->get('app_name'); //returning app base path
+			// $config->get('app_name'); //returning app base path
 			
 			return $config->get('app_name').$firstMatchingRoute->getRequestURI()->getActualUrl($params);
 		}else{
 			throw new RouteNotFoundException("RouteNotFound! requested route is invalid.", 1);
 		}
+	}
+
+	public function getRouteNames()
+	{
+		$route_names = [];
+		foreach ($this->routes as $key => $route) {
+			$route_data =[];
+			$route_data['name'] =$route->getRouteName();
+			$route_data['uri'] =$route->getRequestURI();
+			array_push($route_names, $route_data);
+		}
+
+		return $route_names;
 	}
 	
 }

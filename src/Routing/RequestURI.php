@@ -104,7 +104,7 @@ class RequestURI
                 if( $params_collection->has( $requetUriPart->getPartName() ) ) 
                     $actual_url->push($params_collection->get($requetUriPart->getPartName()));
                 else
-                    throw new Exception("Route paramater:".$requetUriPart->getPartName()." does not exist."); 
+                    throw new Exception("Route paramater:".$requetUriPart->getPartName()." does not exist for."); 
             }else
                 $actual_url->push($requetUriPart->getPartName());
         }); 

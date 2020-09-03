@@ -5,6 +5,11 @@ use Yahmi\Routing\RequestURI;
 use Yahmi\Routing\RequestURIPart;
 use PHPUnit\Framework\TestCase;
 
+class ProjectController
+{
+	public function getDemo(){}
+	public function postDemo($demo_id,$project_id){}
+}
 
 class RouterTest extends TestCase
 {
@@ -40,6 +45,27 @@ class RouterTest extends TestCase
 		$matching_route_url = $router->generateUrl('request_ticket',[':id'=>2]);
 		
 		$this->assertEquals($matching_route_url,'/research/yahmi/projects/2/request_tickets');
+	}
+
+	public function test_controller_routes()
+	{
+		$router = new Router();
+		$router->controller('ProjectController');
+		//fwrite(STDERR, print_r($router, TRUE));
+		$matching_route_url = $router->generateUrl('project.get-demo');
+		
+		$this->assertEquals($matching_route_url,'/research/yahmi/project/demo');	
+	}
+
+	public function test_controller_method_parameters()
+	{
+		$router = new Router();
+		$router->controller('ProjectController');
+		//fwrite(STDERR, print_r($router->getRouteNames(), TRUE));
+		$matching_route_url = $router->generateUrl('project.post-demo',[':demo_id'=>2,':project_id'=>5]);
+		fwrite(STDERR, "\n\nMatching route:\n");
+		fwrite(STDERR, $matching_route_url);
+		$this->assertEquals($matching_route_url,'/research/yahmi/project/demo/2/5');	
 	}
 
 }
