@@ -4,6 +4,8 @@ namespace Yahmi\Validation;
 
 use \Exception;
 use \DateTime;
+use Illuminate\Support\Collection;
+use Yahmi\Http\Response;
 
 class Validator
 {
@@ -169,6 +171,11 @@ class Validator
       return $this->error_messages;
   }
 
+  public function getErrorMessagesCollection()
+  {
+     return new Collection($this->error_messages); 
+  }
+
   /**
    * Return whether validation failed or not.
    *
@@ -200,5 +207,18 @@ class Validator
     $snake_case_name = str_replace('_',' ',$input_field_name);
     $snake_case_name = ucwords($snake_case_name);
     return $snake_case_name;
+  }
+
+  /**
+   * Send Validation errors if any 
+   * @param  [type] $responseMessage [description]
+   * @return [type]                  [description]
+   */
+  public function sendValidationErrorsIfAny($responseMessage)
+  {
+    if( $this->isValidationFailed() ) {
+      echo Response::generateJSONResponse(400, $responseMessage, $this->getErrorMessagesCollection());
+      exit;
+    }
   }
 } // end of class
