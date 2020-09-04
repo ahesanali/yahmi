@@ -63,7 +63,8 @@ class Router
 		$oReflectionClass = new ReflectionClass($controller_class_name);
 
 		foreach ($oReflectionClass->getMethods() as $key => $reflectionMethod) {
-			
+			if($reflectionMethod->isConstructor())
+				continue;
 			$action_method = $reflectionMethod->name;
 			
 			$controller_uri_name = str_replace('controller', '', strtolower($controllerName));

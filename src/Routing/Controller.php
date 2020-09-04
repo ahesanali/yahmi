@@ -9,11 +9,34 @@ use DI\Container;
 abstract class Controller
 {
   
+  /**
+   * View default base directory
+   * @var string
+   */
   protected $viewBaseDir = "views/";
+
+  /**
+   * View cache directory
+   * @var string
+   */
   protected $cacheBaseDir = "resources/cache/";
 
+  /**
+   * Blade template instance
+   * @var [type]
+   */
   private $blade;
+
+  /**
+   * [$DOT_BLADE_EXT description]
+   * @var string
+   */
   private static $DOT_BLADE_EXT = ".blade.php";
+
+  /**
+   * [$DOT_PHP_EXT description]
+   * @var string
+   */
   private static $DOT_PHP_EXT = ".php";
   
   /**
@@ -22,6 +45,14 @@ abstract class Controller
    * @var Container
    */
   private $container;
+
+
+  /**
+   * Controller middlewres for actions
+   * @var array
+   */
+  private $middlewares = [];
+
 
   public function __construct()
   {
@@ -91,4 +122,20 @@ abstract class Controller
     //TODO:: implement this method
   }
   
+  /**
+   * Register middleware
+   */
+  
+  public function middleware($middleware_name, array $middleware_options = [])
+  {
+       $this->middlewares[] = [
+              'middleware' => $middleware_name,
+              'options' => collect($middleware_options),
+      ];
+  }
+
+  public function getMiddlewares()
+  {
+    return $this->middlewares;
+  }
 }
