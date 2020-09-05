@@ -5,9 +5,9 @@ use Invoker\Exception\NotCallableException;
 use Yahmi\Routing\RouteNotFoundException;
 use Yahmi\Routing\ControllerNotFoundException;
 use Yahmi\Routing\RequestURIPart;
+use Yahmi\Contracts\Http\Kernel as KernelContract;
 
-
-class Kernel
+class Kernel implements KernelContract
 {
 	
 	/**
@@ -106,5 +106,15 @@ class Kernel
         } catch (NotCallableException $nce) {
         	echo "Requested URL not found. Cause:".$nce->getMessage();
         }
+    }
+
+     /**
+     * Get the YAHMI application instance.
+     *
+     * @return \Yahmi\Core\Application
+     */
+    public function getApplication()
+    {
+        return $this->app;
     }
 }
