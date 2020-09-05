@@ -27,6 +27,26 @@ class Router
 	{
 		$this->controllerBaseNameSpace = $controllerNameSpace;
 	}
+
+	/**
+	 * Return request action from URL. 
+	 * For example if request url is : /inspire-php-app/catalogue/titleList/34
+	 * This will return :catalogue/titleList/34
+	 * @param  [type] $request_url [description]
+	 * @return [string]              [reuquest actin]
+	 */
+	public function getRequestAction($request_url)
+	{
+			$request_action = substr($request_url,strlen(base_path())); //  catalogue/titleList/34
+            $request_action = strpos($request_action, '?') ? substr($request_action, 0, strpos($request_action, '?')) : $request_action; //Remove query string from request URI
+            $parameters = [];
+            
+            if( empty($request_action) ){
+                $request_action = "/";
+            }
+
+            return $request_action;
+	}
 	/**
 	 * return Route which accept get request
 	 * @param  [type] $routeName     /catalogue_addBook
@@ -100,7 +120,7 @@ class Router
 	/**
 	 * Execute route action
 	 */
-	public function dispatch($uri)
+	public function getMatchingRouteFromURI($uri)
 	{
 		$requestURI = new  RequestURI($uri);
 		$matchingRoutes = $this->routes->filter(function($route) use($requestURI) {

@@ -19,7 +19,7 @@ class RouterTest extends TestCase
 		$router->get('projects','/projects',['controller'=>'ProjectController','action' => 'getProjects','middlewares'=>['FirstMiddleware']]);
 		$router->get('show_project','/projects/:id',['controller'=>'ProjectController','action' => 'showProject']);
 		$router->get('request_ticket','/projects/:id/request_tickets',['controller'=>'RTController','action' => 'getTickets']);
-		$matching_route = $router->dispatch('/projects/45/request_tickets');
+		$matching_route = $router->getMatchingRouteFromURI('/projects/45/request_tickets');
 		//echo 'matching route'.$matching_route->getController();
 		$this->assertEquals($matching_route->getController(),'RTController');
 	}
@@ -30,7 +30,7 @@ class RouterTest extends TestCase
 		$router->get('projects','/projects',['controller'=>'ProjectController','action' => 'getProjects','middlewares'=>['FirstMiddleware']]);
 		$router->get('show_project','/projects/:id',['controller'=>'ProjectController','action' => 'showProject']);
 		$router->get('request_ticket','/projects/:id/request_tickets',['controller'=>'RTController','action' => 'getTickets']);
-		$matching_route = $router->dispatch('/projects/45/request_tickets');
+		$matching_route = $router->getMatchingRouteFromURI('/projects/45/request_tickets');
 		//echo 'matching route'.$matching_route->getController();
 		$this->assertEquals($matching_route->getController(),'RTController');
     }
