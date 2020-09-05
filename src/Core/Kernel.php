@@ -5,6 +5,7 @@ use Invoker\Exception\NotCallableException;
 use Yahmi\Routing\RouteNotFoundException;
 use Yahmi\Routing\ControllerNotFoundException;
 use Yahmi\Routing\RequestURIPart;
+use Yahmi\Routing\Router;
 use Yahmi\Contracts\Http\Kernel as KernelContract;
 
 class Kernel implements KernelContract
