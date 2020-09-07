@@ -7,13 +7,14 @@ use Yahmi\Routing\ControllerNotFoundException;
 use Yahmi\Routing\RequestURIPart;
 use Yahmi\Routing\Router;
 use Yahmi\Contracts\Http\Kernel as KernelContract;
+use Yahmi\Contracts\Container\Application;
 
 class Kernel implements KernelContract
 {
 	
 	/**
 	 * Application instance
-	 * @var \Yahmi\Core\Application
+	 * @var \Yahmi\Contracts\Container\Application
 	 */
 	protected $app;
 
@@ -41,7 +42,7 @@ class Kernel implements KernelContract
     /**
      * Create a new HTTP kernel instance.
      *
-     * @param  \Yahmi\Core\Application  $app
+     * @param  \Yahmi\Contracts\Container\Application  $app
      * @param  \Yahmi\Routing\Router $router
      * @return void
      */
@@ -61,18 +62,20 @@ class Kernel implements KernelContract
             $controller_namespace = config('app.php','controller_namespace');
             $middleware_namespace = config('app.php','middleware_namespace');
 
-            $request_action = $router->getRequestAction($request_url);    
+            $request_action = $router->getRequestAction($request_url);  
+            // var_dump($request_action);
+            // var_dump($router);
             $matchingRoute = $router->getMatchingRouteFromURI($request_action);
             $parameters = $matchingRoute->getRequestURI()->getParameters($request_action);
             $class_name = $controller_namespace.$matchingRoute->getController();
-            $controller = $container->make($class_name);
+            $controller = $this->app->make($class_name);
 
             //invoke middleware before invoking controller action
             $middlewares = $matchingRoute->getMiddlewares();
             //TODO:: this should be part of Route object call
             foreach($middlewares as $middleware){
                 $middleware_class = $middleware_namespace.$middleware;
-                $middleware = $container->make($middleware_class);
+                $middleware = $this->app->make($middleware_class);
                 call_user_func_array(array($middleware, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
             }
             //OR invoking middlewares from controller
@@ -94,7 +97,7 @@ class Kernel implements KernelContract
                 }
 
                 $middleware_class = $middleware_namespace.$middleware['middleware'];
-                $middleware = $container->make($middleware_class);
+                $middleware = $this->app->make($middleware_class);
                 call_user_func_array(array($middleware, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
             }
             //invoking the controller

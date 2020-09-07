@@ -33,12 +33,13 @@ use Philo\Blade\Blade;
   
   public function renderView($view_file, array $modal_data = null)
   {
-  		//README:: each controller will pass view file path as dot like products.index actuall files will have product/index.blade.php
+   		//README:: each controller will pass view file path as dot like products.index actuall files will have product/index.blade.php
+      $views_directory = $this->blade->viewPaths[0];
       $view_file = str_replace(".","/",$view_file);
-      if(file_exists($this->balde->viewPaths.$view_file. self::$DOT_BLADE_EXT) ||
-        file_exists($this->balde->viewPaths.$view_file. self::$DOT_PHP_EXT))
-        return $this->blade->view()->make($view_file,$modal_data)->render();
+      if(file_exists($views_directory.DIRECTORY_SEPARATOR.$view_file. self::$DOT_BLADE_EXT) ||
+        file_exists($views_directory.DIRECTORY_SEPARATOR.$view_file. self::$DOT_PHP_EXT))
+        echo $this->blade->view()->make($view_file,$modal_data)->render();
       else
-         throw new Exception("View file ".$this->balde->viewPaths.$view_file." does not exist");
+         throw new Exception("View file ".$views_directory.DIRECTORY_SEPARATOR.$view_file." does not exist");
   }
 }	

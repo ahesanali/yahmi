@@ -30,14 +30,15 @@ class Router
 
 	/**
 	 * Return request action from URL. 
-	 * For example if request url is : /inspire-php-app/catalogue/titleList/34
+	 * For example if request url is : /inspire-php-app/public/catalogue/titleList/34
 	 * This will return :catalogue/titleList/34
 	 * @param  [type] $request_url [description]
 	 * @return [string]              [reuquest actin]
 	 */
 	public function getRequestAction($request_url)
 	{
-			$request_action = substr($request_url,strlen(base_path())); //  catalogue/titleList/34
+			$app_public_dir = config('app.php','public_dir');
+			$request_action = substr($request_url,strlen($app_public_dir)); //  /catalogue/titleList/34
             $request_action = strpos($request_action, '?') ? substr($request_action, 0, strpos($request_action, '?')) : $request_action; //Remove query string from request URI
             $parameters = [];
             
@@ -154,10 +155,10 @@ class Router
 
 		if(count($matchingRoutes) > 0){
 			$firstMatchingRoute = $matchingRoutes->first() ;
-			$config = new Config('app.php');
+			$app_public_dir = config('app.php','public_dir');
 			// $config->get('app_dir'); //returning app base path
 			
-			return $config->get('app_dir').$firstMatchingRoute->getRequestURI()->getActualUrl($params);
+			return $app_public_dir.$firstMatchingRoute->getRequestURI()->getActualUrl($params);
 		}else{
 			throw new RouteNotFoundException("RouteNotFound! requested route is invalid.", 1);
 		}

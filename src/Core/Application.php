@@ -3,9 +3,16 @@ namespace Yahmi\Core;
 
 use Illuminate\Container\Container;
 use Philo\Blade\Blade;
+use Yahmi\Contracts\Container\Application as ApplicationContract;
 
-class Application extends Container
+class Application extends Container implements ApplicationContract
 {
+    /**
+     * The YAHMI framework version.
+     *
+     * @var string
+     */
+    const VERSION = '1.0.0';
 	/**
      * The base path for the YAHMI installation.
      *
@@ -28,27 +35,6 @@ class Application extends Container
     protected $storagePath;
 
     /**
-     * The custom environment path defined by the developer.
-     *
-     * @var string
-     */
-    protected $environmentPath;
-
-    /**
-     * The environment file to load during bootstrapping.
-     *
-     * @var string
-     */
-    protected $environmentFile = '.env';
-
-    /**
-     * Indicates if the application is running in the console.
-     *
-     * @var bool|null
-     */
-    protected $isRunningInConsole;
-
-    /**
      * The application namespace.
      *
      * @var string
@@ -66,9 +52,22 @@ class Application extends Container
         if ($basePath) {
             $this->setBasePath($basePath);
         }
+
+        $this->registerBaseBindings();
         $this->registerAppServices();
+        $this->registerCoreContainerAliases();
+    }
+    /**
+     * Get the version number of the application.
+     *
+     * @return string
+     */
+    public function version()
+    {
+        return static::VERSION;
     }
 
+    
      /**
      * Set the base path for the application.
      *
@@ -252,11 +251,28 @@ class Application extends Container
     public function registerAppServices()
     {
         $this->bind(Blade::class, function (Container $container) {
-            $views_directory = config('paths','views');
-            $views_cache_directory = config('paths','compiled');
+            $views_directory = config('paths.php','views');
+            $views_cache_directory = config('paths.php','compiled');
             $blade = new Blade($views_directory, $views_cache_directory);
             
             return $blade;
         });
+        
+    }
+
+    /**
+     * Register the core class aliases in the container.
+     *
+     * @return void
+     */
+    public function registerCoreContainerAliases()
+    {
+        foreach ([
+            'app'    => [self::class, \Illuminate\Contracts\Container\Container::class, \Yahmi\Contracts\Container\Application::class, \Psr\Container\ContainerInterface::class]
+        ] as $key => $aliases) {
+            foreach ($aliases as $alias) {
+                $this->alias($key, $alias);
+            }
+        }
     }
 }

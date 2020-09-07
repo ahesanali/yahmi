@@ -3,6 +3,7 @@
 
 use Yahmi\Config\Config;
 use Yahmi\Auth\AuthManager;
+use Illuminate\Container\Container;
 
 $authManager = AuthManager::getInstance();
 
@@ -39,7 +40,9 @@ if (! function_exists('config')) {
 if (! function_exists('route')) {
 	function route($route_name,$params = [])
 	{
-		return app()->make('router')->generateUrl($route_name,$params);;
+        $router = app()->make(Yahmi\Routing\Router::class);
+        
+		return $router->generateUrl($route_name,$params);;
 	}
 }
 
@@ -53,10 +56,10 @@ if (! function_exists('route')) {
      */
     function view($view = null, $data = [])
     {
-        $view = app(View::class);
+        $viewEngine = app()->make(Yahmi\View\View::class);
 
 
-        return $view->renderView($view, $data);
+        return $viewEngine->renderView($view, $data);
     }
 
 if (! function_exists('base_path')) {
@@ -107,6 +110,19 @@ if (! function_exists('app_path')) {
     function app_path($path = '')
     {
         return app()->path($path);
+    }
+}
+
+if (! function_exists('public_path')) {
+    /**
+     * Get the path to the public folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function public_path($path = '')
+    {
+        return app()->publicPath();
     }
 }
 
