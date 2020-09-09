@@ -1,11 +1,11 @@
 <?php
 //use statement for framework classes and use each classes in helper functions
 
-use Yahmi\Config\Config;
+
 use Yahmi\Auth\AuthManager;
 use Illuminate\Container\Container;
 
-$authManager = AuthManager::getInstance();
+// app('auth_manager') = AuthManager::getInstance();
 
 if (! function_exists('app')) {
     /**
@@ -26,11 +26,11 @@ if (! function_exists('app')) {
 }
 
 if (! function_exists('config')) {
-	function config($config_file_name,$config_attribute)
+	function config($config_attribute, $default_value = null)
 	{
-		$config = new Config($config_file_name,$config_attribute);
+		$config = app('config');
 		if($config->has($config_attribute))
-			return $config->get($config_attribute);
+			return $config->get($config_attribute, $default_value);
 		return null;
 	}
 }
@@ -125,11 +125,14 @@ if (! function_exists('public_path')) {
         return app()->publicPath();
     }
 }
-
+/**
+ * Generate asset file path 
+ * Like css,js, or image path
+ */
 if (! function_exists('asset')) {
 	function asset($asset_file_name)
 	{
-		return config('app.php','app_dir').'/assets/'.$asset_file_name;
+		return resource_path('assets').DIRECTORY_SEPARATOR.$asset_file_name;
 	}
 }
 
@@ -140,12 +143,12 @@ if (! function_exists('asset')) {
 if (! function_exists('haveAccessWithRedirect')) {
 	function haveAccessWithRedirect($permission_name)
 	{
-		global $authManager;
+		
 		global $app_name;
 
-		if(! $authManager->getLoggedInUser()->hasAccess($permission_name) )
+		if(! app('auth_manager')->getLoggedInUser()->hasAccess($permission_name) )
 		{
-			//$authManager->logout();
+			//app('auth_manager')->logout();
 			//TODO:: set unauthorise conctroll end point
 			header('Location: '.$app_name.'/views/error/unauthorize.php');
 		}
@@ -159,9 +162,9 @@ if (! function_exists('haveAccessWithRedirect')) {
 if (! function_exists('haveAccess')) {
 	function haveAccess($permission_name)
 	{
-		global $authManager;
+		
 
-		return $authManager->getLoggedInUser()->hasAccess($permission_name);
+		return app('auth_manager')->getLoggedInUser()->hasAccess($permission_name);
 	}
 }
 
@@ -172,9 +175,8 @@ if (! function_exists('haveAccess')) {
 if (! function_exists('isUserLoggedIn')) {
 	function isUserLoggedIn()
 	{
-		global $authManager;
-
-		return $authManager->isUserLoggedIn();
+	
+		return app('auth_manager')->isUserLoggedIn();
 	}
 }
 /**
@@ -184,9 +186,9 @@ if (! function_exists('isUserLoggedIn')) {
 if (! function_exists('isSuper')) {
 	function isSuper()
 	{
-		global $authManager;
+		
 
-		return $authManager->getLoggedInUser()->isSuper();
+		return app('auth_manager')->getLoggedInUser()->isSuper();
 	}
 }
 /**
@@ -196,9 +198,7 @@ if (! function_exists('isSuper')) {
 if (! function_exists('getLoggedInUser')) {
 	function getLoggedInUser()
 	{
-		global $authManager;
-
-		return $authManager->getLoggedInUser();
+		return app('auth_manager')->getLoggedInUser();
 	}
 }
 

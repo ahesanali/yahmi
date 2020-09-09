@@ -2,7 +2,7 @@
 
 namespace  Yahmi\Log;
 
-use Yahmi\Config\Config;
+
 /**
 * This class will used to create  log during application lifecycle.
 */
@@ -17,10 +17,10 @@ class Logger
    public function __construct()
    {
      	//open file
-        $config = new Config('app.php');
-        $application_root =  storage_path('logs'); 
-        $this->logFile = $application_root.'/'.$config->get('log_file');
-     	$this->fileHandle = fopen($this->logFile, "a");
+      $log_file_name = config('app.log_file');
+      $application_root =  storage_path('logs'); 
+      $this->logFile = $application_root.'/'.$log_file_name;
+   	  $this->fileHandle = fopen($this->logFile, "a");
      	if($this->fileHandle === FALSE || $this->fileHandle === NULL)
      			throw new \Exception("Unable to open log file: ".$this->logFile.".");
 

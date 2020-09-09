@@ -59,8 +59,8 @@ class Kernel implements KernelContract
             // $router = $container->get('router');
             $router = $this->router;
             
-            $controller_namespace = config('app.php','controller_namespace');
-            $middleware_namespace = config('app.php','middleware_namespace');
+            $controller_namespace = $router->getControllerBaseNameSpace();
+            $middleware_namespace = $router->getMiddlewaresBaseNameSpace();
 
             $request_action = $router->getRequestAction($request_url);  
             // var_dump($request_action);

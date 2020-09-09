@@ -13,6 +13,12 @@ class Router
 	 * @var string
 	 */
 	private $controllerBaseNameSpace = "";
+
+	/**
+	 * Middleware base name space in applicaiton to instatiate the class
+	 * @var string
+	 */
+	private $middlewareBaseNameSpace = "";
 	/**
 	 * Collection of routes
 	 * @var Array[] Route
@@ -28,6 +34,21 @@ class Router
 		$this->controllerBaseNameSpace = $controllerNameSpace;
 	}
 
+	public function getControllerBaseNameSpace()
+	{
+		return $this->controllerBaseNameSpace;	
+	}
+
+	public function setMiddlewaresBaseNameSpace($middlewareBaseNameSpace)
+	{
+		$this->middlewareBaseNameSpace = $middlewareBaseNameSpace;
+	}
+
+	public function getMiddlewaresBaseNameSpace()
+	{
+		return $this->middlewareBaseNameSpace;	
+	}
+
 	/**
 	 * Return request action from URL. 
 	 * For example if request url is : /inspire-php-app/public/catalogue/titleList/34
@@ -37,7 +58,7 @@ class Router
 	 */
 	public function getRequestAction($request_url)
 	{
-			$app_public_dir = config('app.php','public_dir');
+			$app_public_dir = config('app.public_dir');
 			$request_action = substr($request_url,strlen($app_public_dir)); //  /catalogue/titleList/34
             $request_action = strpos($request_action, '?') ? substr($request_action, 0, strpos($request_action, '?')) : $request_action; //Remove query string from request URI
             $parameters = [];
@@ -155,7 +176,7 @@ class Router
 
 		if(count($matchingRoutes) > 0){
 			$firstMatchingRoute = $matchingRoutes->first() ;
-			$app_public_dir = config('app.php','public_dir');
+			$app_public_dir = config('app.public_dir');
 			// $config->get('app_dir'); //returning app base path
 			
 			return $app_public_dir.$firstMatchingRoute->getRequestURI()->getActualUrl($params);

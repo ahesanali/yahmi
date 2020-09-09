@@ -36,7 +36,7 @@ abstract class Controller
   
   protected function generateUrl($route_name, $parameters = array())
   {
-        return $this->getContainer()->get('router')->generateUrl($route_name,$parameters);
+        return app()->get('router')->generateUrl($route_name,$parameters);
   }
 
   /**

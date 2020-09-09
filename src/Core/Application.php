@@ -56,6 +56,7 @@ class Application extends Container implements ApplicationContract
         $this->registerBaseBindings();
         $this->registerAppServices();
         $this->registerCoreContainerAliases();
+        $this->registerCoreContainerInstancesAliases();
     }
     /**
      * Get the version number of the application.
@@ -251,8 +252,8 @@ class Application extends Container implements ApplicationContract
     public function registerAppServices()
     {
         $this->bind(Blade::class, function (Container $container) {
-            $views_directory = config('paths.php','views');
-            $views_cache_directory = config('paths.php','compiled');
+            $views_directory = config('paths.views');
+            $views_cache_directory = config('paths.compiled');
             $blade = new Blade($views_directory, $views_cache_directory);
             
             return $blade;
@@ -267,12 +268,43 @@ class Application extends Container implements ApplicationContract
      */
     public function registerCoreContainerAliases()
     {
+        
         foreach ([
-            'app'    => [self::class, \Illuminate\Contracts\Container\Container::class, \Yahmi\Contracts\Container\Application::class, \Psr\Container\ContainerInterface::class]
+            'app'    => [self::class, \Illuminate\Contracts\Container\Container::class, \Yahmi\Contracts\Container\Application::class, \Psr\Container\ContainerInterface::class],
         ] as $key => $aliases) {
             foreach ($aliases as $alias) {
                 $this->alias($key, $alias);
             }
         }
+
+        foreach ([
+            'config' => [\Yahmi\Config\Config::class],    
+            'log' => [\Yahmi\Log\Logger::class],
+            'queue' => [\Yahmi\Queue\Queue::class],
+            'queue_wroker' => [\Yahmi\Queue\QueueWorker::class],
+            'session_manager' => [\Yahmi\Session\SessionManager::class],
+        ] as $key => $aliases) {
+            foreach ($aliases as $alias) {
+                $this->alias($alias, $key);
+            }
+        }
+        
+        
+    }
+    /**
+     * Register the core class aliases in the container.
+     *
+     * @return void
+     */
+    public function registerCoreContainerInstancesAliases()
+    {   
+
+        $authManager  = \Yahmi\Auth\AuthManager::getInstance();
+        $this->instance(\Yahmi\Auth\AuthManager::class, $authManager);
+        $this->alias(\Yahmi\Auth\AuthManager::class, 'auth_manager');
+
+        // $validator  = \Yahmi\Validation\Validator::getInstance();
+        // $this->instance(\Yahmi\Validation\Validator::class, $validator);
+        // $this->alias(\Yahmi\Validation\Validator::class, 'validator');
     }
 }

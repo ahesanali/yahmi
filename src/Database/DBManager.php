@@ -4,7 +4,6 @@ namespace Yahmi\Database;
 
 use Yahmi\Logger;
 use \PDO;
-use Yahmi\Config\Config;
 
 /**
  * This class will be used to perform database query like
@@ -28,8 +27,8 @@ class DBManager
 		public function __construct()
 		{
 			 try{
-                $config = new Config('database.php');
-                $mysql_config = $config->get('connection_params')['mysql'];
+                // $config = new Config('database.php');
+                $mysql_config = config('database.connection_params.mysql');
 				$this->dbConnection = new PDO($mysql_config['driver'].':host='.$mysql_config['host'].';dbname='.$mysql_config['database'], $mysql_config['username'], $mysql_config['password'],array(
 					PDO::ATTR_PERSISTENT => true,
 					PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
