@@ -3,8 +3,7 @@
     "description": "PHP application development library or framewaork Yahmi(To protect,to save.)",
     "type": "library",
     "require": {
-        "philo/laravel-blade": "^3.1",
-        "php-di/php-di": "^6.2"
+        "ahesanali/balde-view-engine": "dev-master"
     },
     "autoload": {
         "classmap": [
