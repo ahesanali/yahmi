@@ -307,4 +307,9 @@ class Application extends Container implements ApplicationContract
         // $this->instance(\Yahmi\Validation\Validator::class, $validator);
         // $this->alias(\Yahmi\Validation\Validator::class, 'validator');
     }
+
+    public function flush()
+    {
+        parent::flush();
+    }
 }

@@ -121,4 +121,14 @@ class Kernel implements KernelContract
     {
         return $this->app;
     }
+
+    /**
+     * Clear all data structures used with request
+     * @return [type] [description]
+     */
+    public function flush()
+    {
+        
+        $this->app->flush();
+    }
 }
