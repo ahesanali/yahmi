@@ -2,7 +2,7 @@
 namespace Yahmi\Core;
 
 use Illuminate\Container\Container;
-use AhesanAli\Blade;
+use AhesanAli\Blade\Blade;
 use Yahmi\Contracts\Container\Application as ApplicationContract;
 
 class Application extends Container implements ApplicationContract

@@ -3,7 +3,7 @@ namespace Yahmi\View;
 
 
 use \Exception;
-use AhesanAli\Blade;
+use AhesanAli\Blade\Blade;
 
 
  class View
