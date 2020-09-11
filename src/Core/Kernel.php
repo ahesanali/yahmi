@@ -36,7 +36,7 @@ class Kernel implements KernelContract
      *
      * @var array
      */
-    protected $routeMiddleware = [];
+    protected $routeMiddlewares = [];
 
 
     /**
@@ -56,16 +56,13 @@ class Kernel implements KernelContract
     public function hanldeRequest($request_url)
     {
         try{
-            // $router = $container->get('router');
-            $router = $this->router;
             
-            $controller_namespace = $router->getControllerBaseNameSpace();
-            $middleware_namespace = $router->getMiddlewaresBaseNameSpace();
+            $controller_namespace = $this->router->getControllerBaseNameSpace();
+            // $middleware_namespace = $this->router->getMiddlewaresBaseNameSpace();
 
-            $request_action = $router->getRequestAction($request_url);  
-            // var_dump($request_action);
-            // var_dump($router);
-            $matchingRoute = $router->getMatchingRouteFromURI($request_action);
+            $request_action = $this->router->getRequestAction($request_url);  
+            
+            $matchingRoute = $this->router->getMatchingRouteFromURI($request_action);
             $parameters = $matchingRoute->getRequestURI()->getParameters($request_action);
             $class_name = $controller_namespace.$matchingRoute->getController();
             $controller = $this->app->make($class_name);
@@ -74,9 +71,9 @@ class Kernel implements KernelContract
             $middlewares = $matchingRoute->getMiddlewares();
             //TODO:: this should be part of Route object call
             foreach($middlewares as $middleware){
-                $middleware_class = $middleware_namespace.$middleware;
-                $middleware = $this->app->make($middleware_class);
-                call_user_func_array(array($middleware, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+                $middleware_class_name = $this->getRouteMiddlewareClass($middleware);
+                $middleware_class = $this->app->make($middleware_class_name);
+                call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
             }
             //OR invoking middlewares from controller
             $middlewares = $controller->getMiddlewares();
@@ -96,9 +93,9 @@ class Kernel implements KernelContract
                         continue;     
                 }
 
-                $middleware_class = $middleware_namespace.$middleware['middleware'];
-                $middleware = $this->app->make($middleware_class);
-                call_user_func_array(array($middleware, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+                $middleware_class_name = $this->getRouteMiddlewareClass($middleware['middleware']);
+                $middleware_class = $this->app->make($middleware_class_name);
+                call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
             }
             //invoking the controller
             call_user_func_array(array($controller, $matchingRoute->getActionMethod()),$parameters);
@@ -112,6 +109,15 @@ class Kernel implements KernelContract
         }
     }
 
+    /**
+     * Return middleware class from $routerMiddlewares array
+     * @param  [type] $middleware_name [description]
+     * @return [type]                  [description]
+     */
+    public function getRouteMiddlewareClass($middleware_name)
+    {
+        return $this->routeMiddlewares[$middleware_name];
+    }
      /**
      * Get the YAHMI application instance.
      *
