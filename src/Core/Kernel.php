@@ -58,44 +58,19 @@ class Kernel implements KernelContract
         try{
             
             $controller_namespace = $this->router->getControllerBaseNameSpace();
-            // $middleware_namespace = $this->router->getMiddlewaresBaseNameSpace();
-
             $request_action = $this->router->getRequestAction($request_url);  
-            
             $matchingRoute = $this->router->getMatchingRouteFromURI($request_action);
             $parameters = $matchingRoute->getRequestURI()->getParameters($request_action);
             $class_name = $controller_namespace.$matchingRoute->getController();
             $controller = $this->app->make($class_name);
-
             //invoke middleware before invoking controller action
             $middlewares = $matchingRoute->getMiddlewares();
-            //TODO:: this should be part of Route object call
-            foreach($middlewares as $middleware){
-                $middleware_class_name = $this->getRouteMiddlewareClass($middleware);
-                $middleware_class = $this->app->make($middleware_class_name);
-                call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
-            }
-            //OR invoking middlewares from controller
+            $this->runRouteEntryMiddlewares($middlewares)
+            //Check if controller middlewares are present or not
+            //if nay invoke them
             $middlewares = $controller->getMiddlewares();
             foreach($middlewares as $middleware){
-                $middleware_option = $middleware['options'];
-                //check if action method falls in only group
-                if( $middleware_option->has('only') ){
-                    $only_methods = $middleware_option->get('only');
-                    if(!in_array($matchingRoute->getActionMethod(), $only_methods))
-                        continue;     
-                }
-
-                //do not run middleware if action method fale in except group
-                if( $middleware_option->has('except') ){
-                   $except_methods = $middleware_option->get('except');     
-                   if(in_array($matchingRoute->getActionMethod(), $except_methods))
-                        continue;     
-                }
-
-                $middleware_class_name = $this->getRouteMiddlewareClass($middleware['middleware']);
-                $middleware_class = $this->app->make($middleware_class_name);
-                call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+                $this->runControllerMiddlewares($middleware, $matchingRoute);
             }
             //invoking the controller
             call_user_func_array(array($controller, $matchingRoute->getActionMethod()),$parameters);
@@ -109,6 +84,52 @@ class Kernel implements KernelContract
         }
     }
 
+    /**
+     * Run route entry middlewares like 
+     *  $router->get('home','/',['controller'=>'IndexController','action' => 'index','middlewares'=>['first']]);
+     * @param  [type] $middlewares [description]
+     * @return [type]              [description]
+     */
+    private function runRouteEntryMiddlewares($middlewares)
+    {
+        foreach($middlewares as $middleware){
+            $middleware_class_name = $this->getRouteMiddlewareClass($middleware);
+            $middleware_class = $this->app->make($middleware_class_name);
+            call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+        }
+    }
+
+    /**
+     * Run controller middleware bound to controller methods like
+     *  //define middlewares from controllers
+     * $this->middleware('first',['only'=>['getTitleList','getEditTitle']]);
+     * $this->middleware('second',['except'=>['getTitleList','postAddTitle']]);
+     * @param  [type] $middleware    [description]
+     * @param  [type] $matchingRoute [description]
+     * @return [type]                [description]
+     */
+    private function runControllerMiddlewares($middleware,$matchingRoute)
+    {
+        $middleware_option = $middleware['options'];
+        //check if action method falls in only group
+        if( $middleware_option->has('only') ){
+            $only_methods = $middleware_option->get('only');
+            if(!in_array($matchingRoute->getActionMethod(), $only_methods))
+                return;     
+        }
+
+        //do not run middleware if action method fale in except group
+        if( $middleware_option->has('except') ){
+           $except_methods = $middleware_option->get('except');     
+           if(in_array($matchingRoute->getActionMethod(), $except_methods))
+                return;     
+        }
+
+        $middleware_class_name = $this->getRouteMiddlewareClass($middleware['middleware']);
+        $middleware_class = $this->app->make($middleware_class_name);
+        call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+            
+    }
     /**
      * Return middleware class from $routerMiddlewares array
      * @param  [type] $middleware_name [description]

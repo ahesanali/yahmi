@@ -279,7 +279,7 @@ class Application extends Container implements ApplicationContract
 
         foreach ([
             'config' => [\Yahmi\Config\Config::class],    
-            'log' => [\Yahmi\Log\Logger::class],
+            'logger' => [\Yahmi\Log\Logger::class],
             'queue' => [\Yahmi\Queue\Queue::class],
             'queue_wroker' => [\Yahmi\Queue\QueueWorker::class],
             'session_manager' => [\Yahmi\Session\SessionManager::class],

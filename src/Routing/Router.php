@@ -15,11 +15,6 @@ class Router
 	private $controllerBaseNameSpace = "";
 
 	/**
-	 * Middleware base name space in applicaiton to instatiate the class
-	 * @var string
-	 */
-	private $middlewareBaseNameSpace = "";
-	/**
 	 * Collection of routes
 	 * @var Array[] Route
 	 */
@@ -37,16 +32,6 @@ class Router
 	public function getControllerBaseNameSpace()
 	{
 		return $this->controllerBaseNameSpace;	
-	}
-
-	public function setMiddlewaresBaseNameSpace($middlewareBaseNameSpace)
-	{
-		$this->middlewareBaseNameSpace = $middlewareBaseNameSpace;
-	}
-
-	public function getMiddlewaresBaseNameSpace()
-	{
-		return $this->middlewareBaseNameSpace;	
 	}
 
 	/**
