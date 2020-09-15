@@ -44,7 +44,7 @@ class RouterTest extends TestCase
 		$router->get('request_ticket','/projects/:id/request_tickets',['controller'=>'RTController','action' => 'getTickets']);
 		$matching_route_url = $router->generateUrl('request_ticket',[':id'=>2]);
 		
-		$this->assertEquals($matching_route_url,'/research/yahmi/projects/2/request_tickets');
+		$this->assertEquals($matching_route_url,'/research/yahmi-app/public/projects/2/request_tickets');
 	}
 
 	public function test_controller_routes()
@@ -54,7 +54,7 @@ class RouterTest extends TestCase
 		//fwrite(STDERR, print_r($router, TRUE));
 		$matching_route_url = $router->generateUrl('project.get-demo');
 		
-		$this->assertEquals($matching_route_url,'/research/yahmi/project/demo');	
+		$this->assertEquals($matching_route_url,'/research/yahmi-app/public/project/demo');	
 	}
 
 	public function test_controller_method_parameters()
@@ -65,7 +65,7 @@ class RouterTest extends TestCase
 		$matching_route_url = $router->generateUrl('project.post-demo',[':demo_id'=>2,':project_id'=>5]);
 		fwrite(STDERR, "\n\nMatching route:\n");
 		fwrite(STDERR, $matching_route_url);
-		$this->assertEquals($matching_route_url,'/research/yahmi/project/demo/2/5');	
+		$this->assertEquals($matching_route_url,'/research/yahmi-app/public/project/demo/2/5');	
 	}
 
 }
