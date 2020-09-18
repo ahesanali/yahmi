@@ -12,9 +12,9 @@ class AuthManager extends CoreDataService implements AuthManagerContract
 	 * holds logged in user object
 	 * @var User
 	 */
-	private $user;
+	protected $user;
 
-	private $sessionManager;
+	protected $sessionManager;
 
 	public function __construct()
 	{
