@@ -299,13 +299,9 @@ class Application extends Container implements ApplicationContract
     public function registerCoreContainerInstancesAliases()
     {   
 
-        $authManager  = \Yahmi\Auth\AuthManager::getInstance();
-        $this->instance(\Yahmi\Auth\AuthManager::class, $authManager);
+        $this->singleton(\Yahmi\Contracts\Auth\AuthManager::class,\Yahmi\Auth\AuthManager::class);
         $this->alias(\Yahmi\Auth\AuthManager::class, 'auth_manager');
 
-        // $validator  = \Yahmi\Validation\Validator::getInstance();
-        // $this->instance(\Yahmi\Validation\Validator::class, $validator);
-        // $this->alias(\Yahmi\Validation\Validator::class, 'validator');
     }
 
     public function flush()

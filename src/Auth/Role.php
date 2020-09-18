@@ -2,8 +2,9 @@
 namespace Yahmi\Auth;
 
 use Yahmi\CoreDataService;
+use Yahmi\Contracts\Auth\Role as RoleContract;
 
-class Role extends CoreDataService
+class Role extends CoreDataService implements RoleContract
 {
 	/**
      * Assign below dynamic properties to class

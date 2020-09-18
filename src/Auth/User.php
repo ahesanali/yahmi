@@ -3,9 +3,10 @@ namespace Yahmi\Auth;
 
 use Yahmi\CoreDataService;
 use Yahmi\Auth\Role;
+use Yahmi\Contracts\Auth\User as UserContract;
 use stdClass;
 
-class User extends CoreDataService
+class User extends CoreDataService implements UserContract
 {
     /**
      * Assign below dynamic properties to class

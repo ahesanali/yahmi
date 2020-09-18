@@ -65,41 +65,59 @@ class Kernel implements KernelContract
         $controller = $this->app->make($class_name);
 
         //invoke middleware before invoking controller action
+        //routes.php middleware if any
         $middlewares = $matchingRoute->getMiddlewares();
-        //TODO:: this should be part of Route object call
         foreach($middlewares as $middleware){
-            $middleware_class_name = $this->getRouteMiddlewareClass($middleware);
-            $middleware_class = $this->app->make($middleware_class_name);
-            call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+            $this->runRouteMiddleware($middleware);
         }
         //OR invoking middlewares from controller
         $middlewares = $controller->getMiddlewares();
         foreach($middlewares as $middleware){
-            $middleware_option = $middleware['options'];
-            //check if action method falls in only group
-            if( $middleware_option->has('only') ){
-                $only_methods = $middleware_option->get('only');
-                if(!in_array($matchingRoute->getActionMethod(), $only_methods))
-                    continue;     
-            }
-
-            //do not run middleware if action method fale in except group
-            if( $middleware_option->has('except') ){
-               $except_methods = $middleware_option->get('except');     
-               if(in_array($matchingRoute->getActionMethod(), $except_methods))
-                    continue;     
-            }
-
-            $middleware_class_name = $this->getRouteMiddlewareClass($middleware['middleware']);
-            $middleware_class = $this->app->make($middleware_class_name);
-            call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+            $this->runControllerMiddlewares($middleware,$matchingRoute);
         }
         //invoking the controller
         call_user_func_array(array($controller, $matchingRoute->getActionMethod()),$parameters);
-    //TODO:: Try to implement some fancy and nicely design stack trace for debug mode of application instead of this exception message	
 
     }
 
+    /**
+     * Run route middleware mentioned in routes.php defination
+     * @param  [type] $middleware [description]
+     * @return [type]             [description]
+     */
+    private function runRouteMiddleware($middleware)
+    {
+        $middleware_class_name = $this->getRouteMiddlewareClass($middleware);
+        $middleware_class = $this->app->make($middleware_class_name);
+        call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+    }
+
+    /**
+     * Run controller middleware if mentioned in controller constructor
+     * @param  [type] $middleware [description]
+     * @return [type]             [description]
+     */
+    private function runControllerMiddlewares($middleware,$matchingRoute)
+    {
+        $middleware_option = $middleware['options'];
+        //check if action method falls in only group
+        if( $middleware_option->has('only') ){
+            $only_methods = $middleware_option->get('only');
+            if(!in_array($matchingRoute->getActionMethod(), $only_methods))
+                return;     
+        }
+
+        //do not run middleware if action method fale in except group
+        if( $middleware_option->has('except') ){
+           $except_methods = $middleware_option->get('except');     
+           if(in_array($matchingRoute->getActionMethod(), $except_methods))
+                return;     
+        }
+
+        $middleware_class_name = $this->getRouteMiddlewareClass($middleware['middleware']);
+        $middleware_class = $this->app->make($middleware_class_name);
+        call_user_func_array(array($middleware_class, 'run'),[]);    //as of now we are passing empty parameters letter on we will pass actual parameters
+    }
     /**
      * Return middleware class from $routerMiddlewares array
      * @param  [type] $middleware_name [description]

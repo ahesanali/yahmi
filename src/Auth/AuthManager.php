@@ -2,11 +2,11 @@
 namespace Yahmi\Auth;
 
 use Yahmi\Database\CoreDataService;
-use Yahmi\Session\SessionManager;
 use Yahmi\Auth\User;
+use Yahmi\Contracts\Auth\AuthManager as AuthManagerContract;
 use stdClass;
 
-class AuthManager extends CoreDataService
+class AuthManager extends CoreDataService implements AuthManagerContract
 {
 	/**
 	 * holds logged in user object
@@ -20,7 +20,7 @@ class AuthManager extends CoreDataService
 	{
 		parent::__construct();
 
-		$this->sessionManager = new SessionManager();
+		$this->sessionManager = app('session_manager');
 		$this->user = null;
 	}
 	
@@ -46,7 +46,7 @@ class AuthManager extends CoreDataService
 	 */
 	public function performAuth($user_id,$password)
 	{
-		global $app_name;
+		$app_name = config('app.app_dir');
 
 		$auth_sql = 'SELECT id, First_Name, Last_Name, User_Id, Password, User_Role_id FROM user_master WHERE 
 					 User_Id=:user_id';
@@ -102,7 +102,8 @@ class AuthManager extends CoreDataService
 	 */
 	public function isUserLoggedIn()
 	{
-		global $app_name;
+		$app_name = config('app.app_dir');
+		
 		return ( $this->sessionManager->has('logged_in_user') && ($this->sessionManager->get('app_name') == $app_name) );		
 	}
 
