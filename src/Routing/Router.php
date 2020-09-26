@@ -98,7 +98,8 @@ class Router
 			$method_name_only = str_replace(array("get", "post"), "", $action_method);
 			$action_method_uri_name = StringUtils::camel2dashed($method_name_only);
 			$action_method_route_name = StringUtils::camel2dashed($action_method);
-
+			$controller_uri_name = str_replace("\\", "/", $controller_uri_name);
+			
 			$route_name = $controller_uri_name.".".$action_method_route_name;
 			$route_uri = "/".$controller_uri_name."/".$action_method_uri_name;
 

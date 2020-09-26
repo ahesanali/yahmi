@@ -6,7 +6,7 @@ namespace Yahmi\Http;
 * This class is used to generate various reposne for API
 * 1. JSON Response
 */
-class Response
+class YahmiResponse
 {
 	/**
 	*  Return json reponse with given data
