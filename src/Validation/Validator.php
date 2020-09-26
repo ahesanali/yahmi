@@ -5,7 +5,7 @@ namespace Yahmi\Validation;
 use \Exception;
 use \DateTime;
 use Illuminate\Support\Collection;
-use Yahmi\Http\Response;
+use Yahmi\Http\YahmiResponse;
 
 class Validator
 {
@@ -217,7 +217,7 @@ class Validator
   public function sendValidationErrorsIfAny($responseMessage)
   {
     if( $this->isValidationFailed() ) {
-      echo Response::generateJSONResponse(400, $responseMessage, $this->getErrorMessagesCollection());
+      echo YahmiResponse::generateJSONResponse(400, $responseMessage, $this->getErrorMessagesCollection());
       exit;
     }
   }
