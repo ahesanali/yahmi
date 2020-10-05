@@ -89,7 +89,7 @@ class Validator
                      $trimmed_value =  $input_value;
                      if(!is_array($input_value))
                         $trimmed_value = trim($input_value);
-                    if (empty($trimmed_value)) {
+                     if (empty($trimmed_value) && strlen($trimmed_value) == 0) {
                         $this->error_messages[$input_field_name][] = $this->getSnakeCaseFieldName($input_field_name).' must not be empty';
                         $this->isFailed(true);
                     }
