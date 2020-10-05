@@ -30,7 +30,7 @@ trait QueryBuilder
 	 */
 	public function updateToDb($table_name,$parameters, $where = null)
 	{
-		$update_query = $this->buildUpdateQuery($table_name, $parameters);
+		$update_query = $this->buildUpdateQuery($table_name, $parameters, $where);
 
 		return $this->performDBUpdate($update_query,$parameters);
 	}
