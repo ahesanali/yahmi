@@ -53,13 +53,13 @@ class Kernel implements KernelContract
     }
     
     //$request_url= /inspire-php-app/catalogue/titleList/34
-    public function hanldeRequest($request_url)
+    public function hanldeRequest($request_url,$request_method)
     {
             
         $controller_namespace = $this->router->getControllerBaseNameSpace();
         $request_action = $this->router->getRequestAction($request_url);  
         
-        $matchingRoute = $this->router->getMatchingRouteFromURI($request_action);
+        $matchingRoute = $this->router->getMatchingRouteFromURI($request_action, $request_method);
         $parameters = $matchingRoute->getRequestURI()->getParameters($request_action);
         $class_name = $controller_namespace.$matchingRoute->getController();
         $controller = $this->app->make($class_name);

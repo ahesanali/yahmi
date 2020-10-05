@@ -59,9 +59,9 @@ class Route{
 		$this->acceptedMethods[] = $method;
 	}
 
-	public function isURIMatch(RequestURI $requestURI)
+	public function isURIMatch(RequestURI $requestURI,$requestMethod)
 	{
-		return $this->requestURI->match($requestURI);
+		return ($this->requestURI->match($requestURI) && in_array($requestMethod,$this->acceptedMethods) );
 	}
 	public function getController(){
 		return $this->controller;

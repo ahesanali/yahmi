@@ -128,11 +128,11 @@ class Router
 	/**
 	 * Execute route action
 	 */
-	public function getMatchingRouteFromURI($uri)
+	public function getMatchingRouteFromURI($uri,$requestMethod)
 	{
 		$requestURI = new  RequestURI($uri);
-		$matchingRoutes = $this->routes->filter(function($route) use($requestURI) {
-			if($route->isURIMatch($requestURI))
+		$matchingRoutes = $this->routes->filter(function($route) use($requestURI,$requestMethod) {
+			if($route->isURIMatch($requestURI,$requestMethod))
 				return $route;
 		});
 
