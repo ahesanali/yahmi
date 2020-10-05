@@ -12,7 +12,7 @@ interface Kernel
      * @param  $request_url
      * @return Response
      */
-    public function hanldeRequest($request_url);
+    public function hanldeRequest($request_url,$request_method);
 
     
     /**
