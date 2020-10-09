@@ -43,7 +43,7 @@ class Router
 	 */
 	public function getRequestAction($request_url)
 	{
-			$app_public_dir = config('app.public_dir');
+			$app_public_dir = config('app.app_dir').config('app.public_dir');
 			$request_action = substr($request_url,strlen($app_public_dir)); //  /catalogue/titleList/34
             $request_action = strpos($request_action, '?') ? substr($request_action, 0, strpos($request_action, '?')) : $request_action; //Remove query string from request URI
             $parameters = [];
@@ -162,7 +162,7 @@ class Router
 
 		if(count($matchingRoutes) > 0){
 			$firstMatchingRoute = $matchingRoutes->first() ;
-			$app_public_dir = config('app.public_dir');
+			$app_public_dir = config('app.app_dir').config('app.public_dir');
 			// $config->get('app_dir'); //returning app base path
 			
 			return $app_public_dir.$firstMatchingRoute->getRequestURI()->getActualUrl($params);

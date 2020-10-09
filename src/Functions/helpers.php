@@ -132,7 +132,7 @@ if (! function_exists('public_path')) {
 if (! function_exists('asset')) {
 	function asset($asset_file_name)
 	{
-		return resource_path('assets').DIRECTORY_SEPARATOR.$asset_file_name;
+		return config('app.app_dir').config('app.assets_dir').DIRECTORY_SEPARATOR.$asset_file_name;
 	}
 }
 
