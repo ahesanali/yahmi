@@ -34,6 +34,20 @@ trait QueryBuilder
 
 		return $this->performDBUpdate($update_query,$parameters);
 	}
+
+	/**
+	 * Delete record from table using id column
+	 * @param  [type] $table_name [description]
+	 * @param  [type] $id_column  [description]
+	 * @param  [type] $id_value   [description]
+	 * @return [type]             [description]
+	 */
+	public function deleteFromDB($table_name,$id_column,$id_value)
+	{
+		$delete_sql = "DELETE FROM ".$table_name." WHERE ".$id_column."=:id_value";
+
+		return $this->performDBUpdate($delete_sql,['id_value'=>$id_value]);
+	}
 	/**
 	 * Build INSERT statement
 	 * @param  [type] $table_columns [description]
