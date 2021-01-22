@@ -45,7 +45,7 @@ class Router
 	{
 			$app_public_dir = "";
 			if(config('app.app_dir')=="/")
-				$app_public_dir = config('app.public_dir');
+				$app_public_dir = "";
 			else
 				$app_public_dir = config('app.app_dir').config('app.public_dir');
 			$request_action = substr($request_url,strlen($app_public_dir)); //  /catalogue/titleList/34
@@ -166,7 +166,10 @@ class Router
 
 		if(count($matchingRoutes) > 0){
 			$firstMatchingRoute = $matchingRoutes->first() ;
-			$app_public_dir = config('app.app_dir').config('app.public_dir');
+			if(config('app.app_dir') == "/")
+				$app_public_dir = "";
+			else	
+				$app_public_dir = config('app.app_dir').config('app.public_dir');		
 			// $config->get('app_dir'); //returning app base path
 			
 			return $app_public_dir.$firstMatchingRoute->getRequestURI()->getActualUrl($params);
