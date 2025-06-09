@@ -229,7 +229,7 @@ class Application extends Container implements ApplicationContract
             }
         }
 
-        throw new RuntimeException('Unable to detect application namespace.');
+        throw new \RuntimeException('Unable to detect application namespace.');
     }
     /**
      * Register the basic bindings into the container.

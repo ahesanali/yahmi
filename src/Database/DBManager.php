@@ -2,8 +2,9 @@
 
 namespace Yahmi\Database;
 
-use Yahmi\Logger;
+use Yahmi\Log\Logger;
 use \PDO;
+use \PDOException;
 
 /**
  * This class will be used to perform database query like
@@ -35,7 +36,7 @@ class DBManager
 				));
 				//Logger::log("Connected with mysql database");
 			} catch (PDOException $pdoExec){
-					Logger::log("Unable to connecti with databbase ".DB_NAME." due to:");
+					Logger::log("Unable to connecti with databbase ".$mysql_config['database']." due to:");
 					Logger::log($pdoExec);
 			}
 
@@ -50,10 +51,10 @@ class DBManager
 		}
 		/**
 		 * Perform Insert update in batch to improve performance
-		 * @param unknown $sql_query
+		 * @param string $sql_query
 		 * @param array $parameters
 		 */
-		public function executeBatchUpdate($sql_query, array $parameters = NULL)
+		public function executeBatchUpdate($sql_query, ?array $parameters = NULL)
 		{
 			$result_set = FALSE;
 			//prepare query
@@ -92,7 +93,7 @@ class DBManager
 		 * @param  bool $get_single_row
 		 * @return array $result_set
 		 */
-		public function executeQuery($query_type, $sql_query, array $parameters = NULL)
+		public function executeQuery($query_type, $sql_query, ?array $parameters = NULL)
 		{
 				$result_set = FALSE;
 				//prepare query

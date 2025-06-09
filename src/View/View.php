@@ -31,7 +31,7 @@ use AhesanAli\Blade\Blade;
   		$this->blade = $blade;
   }
   
-  public function renderView($view_file, array $modal_data = null)
+  public function renderView($view_file, ?array $modal_data = null)
   {
    		//README:: each controller will pass view file path as dot like products.index actuall files will have product/index.blade.php
       $views_directory = $this->blade->viewPaths[0];

@@ -6,6 +6,10 @@ use Yahmi\Contracts\Auth\Role as RoleContract;
 
 class Role extends CoreDataService implements RoleContract
 {
+    public int $roleId;
+    public string $role;
+    public  $permissions;
+    public bool $isSuper;
 	/**
      * Assign below dynamic properties to class
      * 

@@ -8,6 +8,13 @@ use stdClass;
 
 class User extends CoreDataService implements UserContract
 {
+    public int $id;
+    public string $firstName;
+    public string $lastName;
+    public string $userId;
+    public string $password;
+    public int $userRoleId;
+    public string $apiToken; // <-- Add this
     /**
      * Assign below dynamic properties to class
      * 

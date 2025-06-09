@@ -17,9 +17,9 @@ class RequestURI
 	private $requestURIString;
 	/**
 	 * RequestURIPart
-	 * @var Array
+	 * @var Object
 	 */
-	private $requestURIParts;
+	private Collection $requestURIParts;
 
 	public function __construct($requestURI)
 	{

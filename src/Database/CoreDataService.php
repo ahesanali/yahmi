@@ -5,6 +5,8 @@ namespace Yahmi\Database;
 use Yahmi\Log\Logger;
 use Yahmi\Database\DBManager;
 use Yahmi\Database\QueryBuilder;
+use Yahmi\Pagination\Paginator;
+use \Exception;
 /**
 * This class will used to execute database query using Nemiro\Data\MySql.
 */
@@ -74,7 +76,7 @@ abstract class CoreDataService
 
             return $result_set;
         } catch (Exception $ex) {
-        	  Logger::log("Error occurs due to :".$exec);
+        	  Logger::log("Error occurs due to :".$ex->getMessage());
             return NULL;
         }
     }
@@ -91,7 +93,7 @@ abstract class CoreDataService
 
            return $is_executed;
        } catch (Exception $ex) {
-       		Logger::log("Error occurs due to :".$exec);
+       		Logger::log("Error occurs due to :".$ex->getMessage());
         	return FALSE;
        }
    }
@@ -110,7 +112,7 @@ abstract class CoreDataService
    	
    		return $is_executed;
    	} catch (Exception $ex) {
-   		Logger::log("Error occurs due to :".$exec);
+   		Logger::log("Error occurs due to :".$ex->getMessage());
    		return FALSE;
    	}
    	
@@ -130,7 +132,7 @@ abstract class CoreDataService
             $result_value = $this->dbManager->getScalarValue($sql_query,$column_name);
             return $result_value;
         } catch (Exception $ex) {
-            Logger::log("Error occurs due to :".$exec);
+            Logger::log("Error occurs due to :".$ex->getMessage());
           	return;
         }
     }
