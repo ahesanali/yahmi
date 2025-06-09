@@ -1,7 +1,7 @@
 <?php
 namespace Yahmi\Auth;
 
-use Yahmi\CoreDataService;
+use Yahmi\Database\CoreDataService;
 use Yahmi\Auth\Role;
 use Yahmi\Contracts\Auth\User as UserContract;
 use stdClass;

@@ -1,7 +1,7 @@
 <?php
 namespace Yahmi\Auth;
 
-use Yahmi\CoreDataService;
+use Yahmi\Database\CoreDataService;
 use Yahmi\Contracts\Auth\Role as RoleContract;
 
 class Role extends CoreDataService implements RoleContract
